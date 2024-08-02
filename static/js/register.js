@@ -44,15 +44,13 @@ emailField.addEventListener('keyup', (e) => {
     }
 });
 
-showPassword.addEventListener('click',(e) =>{
-    if (showPassword.textContent==='SHOW')
-    {
+showPassword.addEventListener('click', (e) => {
+    if (showPassword.textContent === 'SHOW') {
         showPassword.textContent = 'HIDE'
-        passwordField.setAttribute("type",'text')
+        passwordField.setAttribute("type", 'text')
     }
-    else{
+    else {
         showPassword.textContent = 'SHOW'
-        passwordField.setAttribute("type",'password')
+        passwordField.setAttribute("type", 'password')
     }
-
 });

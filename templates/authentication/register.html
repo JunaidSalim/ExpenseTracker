@@ -13,6 +13,8 @@
                 <div class="card-title py-3">
                     <h4>Register for a free account</h4>
                 </div>
+
+                {% include "components/messages.html" %}
                 <form action="{% url 'register' %}" method="post">
                     {% csrf_token %}
 
@@ -34,11 +36,11 @@
 
 
                     <label for="inputPassword5" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password"
-                        class="form-control" aria-describedby="passwordHelpBlock">
-                        
+                    <input type="password" id="password" name="password" placeholder="Password" class="form-control"
+                        aria-describedby="passwordHelpBlock">
+
                     <small class="float-end showPassword">SHOW</small>
-                   
+
                     <br>
                     <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" />
                 </form>
