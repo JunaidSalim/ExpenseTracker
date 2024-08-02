@@ -4,6 +4,8 @@ const invalidFeedback = document.querySelector('.invalid-feedback')
 const emailField = document.querySelector('#email')
 const EmailFeedback = document.querySelector('.email-invalid-feedback')
 
+const showPassword = document.querySelector('.showPassword')
+const passwordField = document.querySelector('#password')
 
 usernameField.addEventListener('keyup', (e) => {
     const username = e.target.value;
@@ -40,4 +42,17 @@ emailField.addEventListener('keyup', (e) => {
             }
         });
     }
+});
+
+showPassword.addEventListener('click',(e) =>{
+    if (showPassword.textContent==='SHOW')
+    {
+        showPassword.textContent = 'HIDE'
+        passwordField.setAttribute("type",'text')
+    }
+    else{
+        showPassword.textContent = 'SHOW'
+        passwordField.setAttribute("type",'password')
+    }
+
 });

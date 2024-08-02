@@ -1,6 +1,8 @@
 {% extends "base_auth.html" %}
 {% load static %}
 {% block content %}
+
+
 <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
@@ -25,18 +27,18 @@
                         <label for="Email" class="form-label">Email address</label>
                         <input type="email" type="email" name="email" placeholder="email" class="form-control"
                             id="email" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="email-invalid-feedback" style="display: none;" class="form-text"></div>
+                        <div id="emailHelp" class="email-invalid-feedback" style="display: none;" class="form-text">
+                        </div>
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
 
 
                     <label for="inputPassword5" class="form-label">Password</label>
-                    <input type="password" id="inputPassword5" name="password" placeholder="Password"
+                    <input type="password" id="password" name="password" placeholder="Password"
                         class="form-control" aria-describedby="passwordHelpBlock">
-                    <div id="passwordHelpBlock" class="form-text">
-                        Your password must be 8-20 characters long, contain letters and numbers, and must not contain
-                        spaces, special characters, or emoji.
-                    </div>
+                        
+                    <small class="float-end showPassword">SHOW</small>
+                   
                     <br>
                     <input type="submit" value="Register" class="btn btn-block btn-primary submit-btn" />
                 </form>
