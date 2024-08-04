@@ -7,6 +7,9 @@ const EmailFeedback = document.querySelector('.email-invalid-feedback')
 const showPassword = document.querySelector('.showPassword')
 const passwordField = document.querySelector('#password')
 
+const submitButton = document.querySelector('.submit-btn')
+
+
 usernameField.addEventListener('keyup', (e) => {
     const username = e.target.value;
     usernameField.classList.remove('is-invalid');
@@ -17,9 +20,13 @@ usernameField.addEventListener('keyup', (e) => {
             method: "POST",
         }).then(res => res.json()).then(data => {
             if (data.username_error) {
+                submitButton.disabled = true
                 usernameField.classList.add('is-invalid');
                 invalidFeedback.style.display = 'block';
                 invalidFeedback.innerHTML = `<p>${data.username_error}</p>`
+            }
+            else {
+                submitButton.removeAttribute("disabled")
             }
         });
     }
@@ -36,9 +43,13 @@ emailField.addEventListener('keyup', (e) => {
         }).then(res => res.json()).then(data => {
             console.log(data)
             if (data.email_error) {
+                submitButton.disabled = true
                 emailField.classList.add('is-invalid');
                 EmailFeedback.style.display = 'block';
                 EmailFeedback.innerHTML = `<p>${data.email_error}</p>`
+            }
+            else {
+                submitButton.removeAttribute("disabled")
             }
         });
     }
