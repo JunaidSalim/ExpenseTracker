@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 import json
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from validate_email import validate_email
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 class UsernameValidationView(View):
@@ -52,3 +53,33 @@ class RegisterationView(View):
                 return render(request,'authentication/register.html')
             
         return render(request,'authentication/register.html')
+
+class LoginView(View):
+    def get(self,request):
+        return render(request,'authentication/login.html') 
+    
+    def post(self,request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if username and password:
+            user = authenticate(username=username,password=password)
+
+            if user:
+                if user.is_active:
+                    login(request,user)
+                    messages.success(request,'Welcome ' + user.username + ', Your are now logged in')
+                    return redirect('home')
+            else:
+                messages.error(request,'Invalid Credentials')
+                return render(request,'authentication/login.html')
+        else:
+            messages.error(request,'Please Fill all Fields')
+            return render(request,'authentication/login.html')
+
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+        messages.success(request,'You have been logged out')
+        return redirect('login')
+    
