@@ -50,7 +50,7 @@ class RegisterationView(View):
                 user.set_password(password)
                 user.save()
                 messages.success(request,'Account Successfully Created')
-                return render(request,'authentication/register.html')
+                return redirect('login')
             
         return render(request,'authentication/register.html')
 

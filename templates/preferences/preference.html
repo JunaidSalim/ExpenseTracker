@@ -1,0 +1,26 @@
+{% extends "base.html" %}\
+
+{% block content %}
+<h5>Preferred Currency</h5>
+<hr />
+{% include "components/messages.html" %}
+<div class="container mt-3">
+    <form action="{% url 'preference' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group">
+            <select name="currency" class="form-select" id="inputGroupSelect04" aria-label="Example select with button addon">
+                {% if currency_val %}
+                <option  selected>{{currency_val}}</option>
+                   {% else %} 
+                <option  selected>Choose...</option>
+                {% endif %}
+                {% for curr in currency %}
+                <option name="currency" value = "{{curr.name}} - {{curr.value}}" >{{curr.name}} - {{curr.value}}</option>
+
+                {% endfor %}
+            </select>
+            <input class="btn btn-outline-secondary" type="submit" value="Save">
+        </div>
+    </form>
+</div>
+{% endblock content %}
