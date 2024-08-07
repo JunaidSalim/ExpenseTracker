@@ -32,7 +32,7 @@
             </thead>
 
             <tbody>
-                {% for expense in expenses %}
+                {% for expense in page_obj %}
                 <tr>
                     <td>{{expense.amount}}</td>
                     <td>{{expense.category}}</td>
@@ -47,10 +47,34 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
-    {% else %}
-    <h2>No Expenses To Show!</h2>
-    {% endif %}
+        <div class="pagination-container">
+            <div>
+                Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </div>
+            <ul class="pagination justify-content-end">
+                {% if page_obj.has_previous %}
+                    <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
+                        <a class="page-link" href="?page=1">&laquo; 1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                {% endif %}
+        
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }} &raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        
+        {% else %}
+        <h2>No Expenses To Show!</h2>
+        {% endif %}
 
-</div>
-{% endblock content %}
+    </div>
+    {% endblock content %}

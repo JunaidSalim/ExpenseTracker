@@ -5,6 +5,7 @@ from .models import Category, Expense
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from preferences.models import UserPreference
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -93,8 +94,6 @@ def deleteExpense(request,id):
         messages.error(request,'Access Denied')
         return redirect('expenses')
 
-    
-
 
 @login_required(login_url='login')
 def expenses(request):
@@ -103,8 +102,12 @@ def expenses(request):
     except:
         currency = ""
     expenses = Expense.objects.filter(user = request.user)
+    paginator = Paginator(expenses, 2)
+    page_number = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator, page_number)
     context = {
         "currency": currency,
-        "expenses": expenses
+        "expenses": expenses,
+        "page_obj":page_obj
         }
     return render(request,'core/expenses.html',context)
