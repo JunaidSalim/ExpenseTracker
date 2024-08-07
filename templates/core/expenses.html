@@ -11,10 +11,46 @@
                 </ol>
             </nav>
         </div>
-        
+
         <div class="col-md-2">
             <a href="{% url 'add-expense' %}" class="btn btn-primary">Add Expense</a>
         </div>
     </div>
+    {% if expenses.count %}
+
+    <div class="app-table">
+
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Amount ({{currency}})</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{expense.amount}}</td>
+                    <td>{{expense.category}}</td>
+                    <td>{{expense.description}}</td>
+                    <td>{{expense.date}}</td>
+
+                    <td>
+                        <a href="{% url 'edit-expense' expense.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <h2>No Expenses To Show!</h2>
+    {% endif %}
+
 </div>
 {% endblock content %}
