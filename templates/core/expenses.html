@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 
 <div class="container mt-4">
@@ -17,6 +18,15 @@
         </div>
     </div>
     {% if expenses.count %}
+    <div class="row my-2 mx-4">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="searchField" placeholder="Search">
+            </div>
+        </div>
+    </div>
 
     <div class="app-table">
 
@@ -47,34 +57,58 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="pagination-container">
-            <div>
-                Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            </div>
-            <ul class="pagination justify-content-end">
-                {% if page_obj.has_previous %}
-                    <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
-                        <a class="page-link" href="?page=1">&laquo; 1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    </li>
-                {% endif %}
-        
-                {% if page_obj.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }} &raquo;</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
-        
-        {% else %}
-        <h2>No Expenses To Show!</h2>
-        {% endif %}
-
     </div>
+    <p class="no-results" style="display: none;">No results </p>
+    <div class="table-output">
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Amount ({{currency}})</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody class="table-body">
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination-container row ">
+        <div class="col-10">
+            Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </div>
+        <ul class="pagination justify-content-end col-2">
+            {% if page_obj.has_previous %}
+            <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
+                <a class="page-link" href="?page=1">&laquo; 1</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+
+                    {{ page_obj.paginator.num_pages}} &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% else %}
+    <h2>No Expenses To Show!</h2>
+    {% endif %}
+
+    <script src="{% static 'js/searchExpenses.js' %}">
+    </script>
     {% endblock content %}

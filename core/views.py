@@ -6,9 +6,11 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from preferences.models import UserPreference
 from django.core.paginator import Paginator
+import json
+from django.db.models import Q, F
+from django.http import JsonResponse
 
 # Create your views here.
-
 @login_required(login_url='auth/login')
 def index(request):
     return render(request,'base.html')
@@ -111,3 +113,18 @@ def expenses(request):
         "page_obj":page_obj
         }
     return render(request,'core/expenses.html',context)
+
+def searchExpense(request):
+    if request.method == 'POST':
+        search = json.loads(request.body).get('search')
+        
+        expenses = Expense.objects.filter(
+            Q(amount__istartswith=search, user=request.user) | 
+            Q(description__icontains=search, user=request.user) |  
+            Q(category__name__icontains=search, user=request.user) |  
+            Q(date__istartswith=search, user=request.user)
+        ).values('amount', 'description', 'date', 'category__name')
+        
+        results = expenses.annotate(category=F('category__name')).values('amount', 'description', 'date', 'category')
+        
+        return JsonResponse(list(results), safe=False)
