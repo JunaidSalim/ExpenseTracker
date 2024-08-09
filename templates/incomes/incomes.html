@@ -7,17 +7,17 @@
         <div class="col-md-10">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'expenses' %}">Expenses</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">My Expenses</li>
+                    <li class="breadcrumb-item"><a href="{% url 'incomes' %}">Incomes</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Incomes</li>
                 </ol>
             </nav>
         </div>
 
         <div class="col-md-2">
-            <a href="{% url 'add-expense' %}" class="btn btn-primary">Add Expense</a>
+            <a href="{% url 'add-income' %}" class="btn btn-primary">Add Income</a>
         </div>
     </div>
-    {% if expenses.count %}
+    {% if incomes.count %}
     <div class="row my-2 mx-4">
         <div class="col-md-8"></div>
         <div class="col-md-4">
@@ -42,15 +42,15 @@
             </thead>
 
             <tbody>
-                {% for expense in page_obj %}
+                {% for income in page_obj %}
                 <tr>
-                    <td>{{expense.amount}}</td>
-                    <td>{{expense.category}}</td>
-                    <td>{{expense.description}}</td>
-                    <td>{{expense.date}}</td>
+                    <td>{{income.amount}}</td>
+                    <td>{{income.category}}</td>
+                    <td>{{income.description}}</td>
+                    <td>{{income.date}}</td>
 
                     <td>
-                        <a href="{% url 'edit-expense' expense.id %}" class="btn btn-secondary btn-sm">Edit</a>
+                        <a href="{% url 'edit-income' income.id %}" class="btn btn-secondary btn-sm">Edit</a>
                     </td>
                 </tr>
 
@@ -59,6 +59,7 @@
         </table>
     </div>
     <p class="no-results" style="display: none;">No results </p>
+    
     <div class="table-output">
         <table class="table table-stripped table-hover">
             <thead>
@@ -106,9 +107,9 @@
     </div>
 
     {% else %}
-    <h2>No Expenses To Show!</h2>
+    <h2>No Incomes To Show!</h2>
     {% endif %}
 
-    <script src="{% static 'js/searchExpenses.js' %}">
+    <script src="{% static 'js/searchIncomes.js' %}">
     </script>
     {% endblock content %}

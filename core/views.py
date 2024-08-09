@@ -128,3 +128,6 @@ def searchExpense(request):
         results = expenses.annotate(category=F('category__name')).values('amount', 'description', 'date', 'category')
         
         return JsonResponse(list(results), safe=False)
+    
+    else:
+        return redirect('home')

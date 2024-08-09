@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="{% url 'incomes' %}">Incomes</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add Income</li>
+    </ol>
+  </nav>
+
+  <div class="card">
+    <div class="card-body">
+      <form action="{% url 'add-income' %}" method="post">
+        {% include 'components/messages.html' %}
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="amount" class="form-label">Amount</label>
+          <input
+          required
+            type="text"
+            class="form-control form-control-sm"
+            name="amount"
+            id="amount"
+            value="{{ values.amount }}"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <input
+            type="text"
+            class="form-control form-control-sm"
+            name="description"
+            id="description"
+            value="{{ values.description }}"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="source" class="form-label">Source</label>
+          <select class="form-select form-select-sm" name="source" id="source" required>
+            {% for source in sources %}
+            <option value="{{ source.name }}">{{ source.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="date" class="form-label">Date of Income</label>
+          <input
+          required
+            type="date"
+            class="form-control form-control-sm"
+            name="date"
+            id="date"
+            value="{{ values.date }}"
+          />
+        </div>
+        <div class="">
+            <input
+              type="submit"
+              value="Submit"
+              class="btn btn-primary btn-md"
+            />
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
