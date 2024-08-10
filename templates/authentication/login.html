@@ -11,7 +11,7 @@
 
             <div class="card-body">
                 <div class="card-title py-3">
-                    <h4>Register for a free account</h4>
+                    <h4>Login to your account</h4>
                 </div>
 
                 {% include "components/messages.html" %}
@@ -32,12 +32,14 @@
                     <input type="submit" value="Log in" class="btn btn-block btn-primary" />
                 </form>
 
+                <span>Dont Have Account? <a href="{% url 'register' %}">Register</a></span>
             </div>
 
         </div>
     </div>
 </div>
-<div class="col-md-4"></div>
+<div class="col-md-4">
+</div>
 </div>
 
 <script src="{% static 'js/register.js' %}"></script>

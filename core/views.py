@@ -9,6 +9,7 @@ from django.core.paginator import Paginator
 import json
 from django.db.models import Q, F
 from django.http import JsonResponse
+import datetime
 
 # Create your views here.
 @login_required(login_url='auth/login')
@@ -131,3 +132,33 @@ def searchExpense(request):
     
     else:
         return redirect('home')
+    
+@login_required(login_url='login')
+def expenses_summary(request):
+    today_date = datetime.date.today()
+    month_ago = today_date - datetime.timedelta(days = 30)
+    expenses=  Expense.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
+    result = {}
+
+    def get_catgeory(expense):
+        return expense.category.name
+    
+    def get_expense_category_amount(category):
+        amount = 0
+        filtered_by_category = expenses.filter(category__name = category)
+
+        for item in filtered_by_category:
+            amount+=item.amount
+        
+        return amount
+
+    category_list = list(set(map(get_catgeory,expenses)))
+    print(category_list)
+    for x in expenses:
+        for y in category_list:
+            result[y] = get_expense_category_amount(y)
+
+    return JsonResponse({'expense_category_data':result}, safe=False)
+
+def stats(request):
+    return render(request,'core/stats.html')
