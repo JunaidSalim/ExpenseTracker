@@ -8,8 +8,9 @@ from preferences.models import UserPreference
 from django.core.paginator import Paginator
 import json
 from django.db.models import Q, F
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import datetime
+import csv
 
 # Create your views here.
 @login_required(login_url='auth/login')
@@ -105,7 +106,7 @@ def expenses(request):
     except:
         currency = ""
     expenses = Expense.objects.filter(user = request.user)
-    paginator = Paginator(expenses, 2)
+    paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
     context = {
@@ -162,3 +163,17 @@ def expenses_summary(request):
 
 def stats(request):
     return render(request,'core/stats.html')
+
+@login_required(login_url='login')
+def exportCSV(request):
+    response = HttpResponse(content_type = 'text/csv')
+    response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.csv'
+    writer = csv.writer(response)
+    writer.writerow(['Amount','Description','Category','Date'])
+    
+    expenses = Expense.objects.filter(user = request.user)
+
+    for expense in expenses:
+        writer.writerow([expense.amount,expense.description,expense.category.name,expense.date.strftime('%d-%m-%Y')])
+    
+    return response
