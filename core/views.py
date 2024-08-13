@@ -11,6 +11,7 @@ from django.db.models import Q, F
 from django.http import JsonResponse, HttpResponse
 import datetime
 import csv
+import xlwt
 
 # Create your views here.
 @login_required(login_url='auth/login')
@@ -177,3 +178,37 @@ def exportCSV(request):
         writer.writerow([expense.amount,expense.description,expense.category.name,expense.date.strftime('%d-%m-%Y')])
     
     return response
+
+@login_required(login_url='login')
+def exportExcel(request):
+    response = HttpResponse(content_type = 'application/ms-excel')
+    response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.xls'
+
+    workbook = xlwt.Workbook(encoding='utf-8')
+    worksheet = workbook.add_sheet('Expenses')
+    
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Amount','Description','Category','Date']
+
+    for col_num in range(len(columns)):
+        worksheet.write(row_num,col_num,columns[col_num],font_style)
+
+    rows = Expense.objects.filter(user = request.user).values_list('amount','description','category__name','date')
+
+    fontStyle = xlwt.XFStyle()
+    fontStyle.font.bold = False
+
+    for row in rows:
+        row_num+=1
+
+        for col_num in range(len(row)):
+            worksheet.write(row_num,col_num,str(row[col_num]),fontStyle)
+    
+    workbook.save(response)
+
+    return response
+
+    
