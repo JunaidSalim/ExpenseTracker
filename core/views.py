@@ -12,6 +12,8 @@ from django.http import JsonResponse, HttpResponse
 import datetime
 import csv
 import xlwt
+from xhtml2pdf import pisa
+from django.template.loader import get_template
 
 # Create your views here.
 @login_required(login_url='auth/login')
@@ -211,4 +213,20 @@ def exportExcel(request):
 
     return response
 
-    
+
+def exportPDF(request):
+    response = HttpResponse(content_type = 'application/pdf')
+    response['Content-Disposition'] = 'inline;attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.pdf'
+
+    expenses = Expense.objects.all()
+
+    context = {'expenses':expenses}
+    template_path = 'pdf.html'    
+  
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
