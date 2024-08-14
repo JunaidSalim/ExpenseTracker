@@ -15,6 +15,11 @@ import xlwt
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 
+import base64
+import os
+from django.conf import settings
+from pathlib import Path
+
 # Create your views here.
 @login_required(login_url='auth/login')
 def index(request):
@@ -213,14 +218,17 @@ def exportExcel(request):
 
     return response
 
-
+@login_required(login_url='login')
 def exportPDF(request):
     response = HttpResponse(content_type = 'application/pdf')
     response['Content-Disposition'] = 'inline;attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.pdf'
 
     expenses = Expense.objects.all()
-
-    context = {'expenses':expenses}
+    total = 0
+    context = {
+        'expenses':expenses,
+        'total' : total
+        }
     template_path = 'pdf.html'    
   
     template = get_template(template_path)
