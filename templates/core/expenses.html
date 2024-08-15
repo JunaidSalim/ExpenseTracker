@@ -20,9 +20,9 @@
     {% if expenses.count %}
     <div class="row my-2 mx-4">
         <div class="col-md-8">
-            <a href="{% url 'export-csv' %}" class="btn btn-secondary">Export CSV</a>
-            <a href="{% url 'export-excel' %}" class="btn btn-secondary">Export Excel(.xls)</a>
-            <a href="{% url 'export-pdf' %}" class="btn btn-secondary" target="_blank">Export PDF</a>
+            <a href="{% url 'export-csv' %}?tab=expense" class="btn btn-secondary">Export CSV</a>
+            <a href="{% url 'export-excel' %}?tab=expense" class="btn btn-secondary">Export Excel(.xls)</a>
+            <a href="{% url 'export-pdf' %}?tab=expense" class="btn btn-secondary" target="_blank">Export PDF</a>
 
         </div>
         <div class="col-md-4">

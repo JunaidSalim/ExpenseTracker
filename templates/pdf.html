@@ -91,25 +91,33 @@
                 <tr>
                     <th>No.</th>
                     <th>Amount ({{ currency }})</th>
+                    {% if tab == 'income' %}
+                    <th>Source</th>
+                    {% else %}
                     <th>Category</th>
+                    {% endif %}
                     <th>Description</th>
                     <th>Date</th>
                 </tr>
             </thead>
 
             <tbody>
-                {% for expense in expenses %}
+                {% for row in data %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ expense.amount }}</td>
-                    <td>{{ expense.category }}</td>
-                    <td>{{ expense.description }}</td>
-                    <td>{{ expense.date }}</td>
+                    <td>{{ row.amount }}</td>
+                    {% if tab == 'income' %}
+                    <td>{{ row.source }}</td>
+                    {% else %}
+                    <td>{{ row.category }}</td>
+                    {% endif %}
+                    <td>{{ row.description }}</td>
+                    <td>{{ row.date }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
 
-           
+
         </table>
     </div>
 </body>

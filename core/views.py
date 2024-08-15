@@ -14,11 +14,12 @@ import csv
 import xlwt
 from xhtml2pdf import pisa
 from django.template.loader import get_template
-
+from incomes.models import Income
 import base64
 import os
 from django.conf import settings
 from pathlib import Path
+from preferences.models import UserPreference
 
 # Create your views here.
 @login_required(login_url='auth/login')
@@ -114,7 +115,7 @@ def expenses(request):
     except:
         currency = ""
     expenses = Expense.objects.filter(user = request.user)
-    paginator = Paginator(expenses, 5)
+    paginator = Paginator(expenses, 10)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
     context = {
@@ -174,36 +175,57 @@ def stats(request):
 
 @login_required(login_url='login')
 def exportCSV(request):
+    tab = request.GET['tab']
     response = HttpResponse(content_type = 'text/csv')
-    response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.csv'
+    if tab=='income':
+        response['Content-Disposition'] = 'attachment;filename = Incomes_' + str(datetime.datetime.now()) + '.csv'
+    else:
+        response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.csv'
+        
     writer = csv.writer(response)
-    writer.writerow(['Amount','Description','Category','Date'])
-    
-    expenses = Expense.objects.filter(user = request.user)
-
-    for expense in expenses:
-        writer.writerow([expense.amount,expense.description,expense.category.name,expense.date.strftime('%d-%m-%Y')])
+    if tab=='income':
+        writer.writerow(['Amount','Description','Source','Date'])
+        rows = Income.objects.filter(user = request.user)
+        for income in rows:
+            writer.writerow([income.amount,income.description,income.source.name,income.date.strftime('%d-%m-%Y')])
+    else:
+        writer.writerow(['Amount','Description','Category','Date'])
+        rows = Expense.objects.filter(user = request.user)
+        for expense in rows:
+            writer.writerow([expense.amount,expense.description,expense.category.name,expense.date.strftime('%d-%m-%Y')])
     
     return response
 
 @login_required(login_url='login')
 def exportExcel(request):
+    tab = request.GET['tab']
     response = HttpResponse(content_type = 'application/ms-excel')
-    response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.xls'
+    if tab=='income':        
+        response['Content-Disposition'] = 'attachment;filename = Incomes_' + str(datetime.datetime.now()) + '.xls'
+        workbook = xlwt.Workbook(encoding='utf-8')
+        worksheet = workbook.add_sheet('Incomes')
+    else:        
+        response['Content-Disposition'] = 'attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.xls'
+        workbook = xlwt.Workbook(encoding='utf-8')
+        worksheet = workbook.add_sheet('Expenses')
 
-    workbook = xlwt.Workbook(encoding='utf-8')
-    worksheet = workbook.add_sheet('Expenses')
+    
     
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Amount','Description','Category','Date']
+    if tab=='income':        
+        columns = ['Amount','Description','Source','Date']
+    else:
+        columns = ['Amount','Description','Category','Date']
+
+
 
     for col_num in range(len(columns)):
         worksheet.write(row_num,col_num,columns[col_num],font_style)
 
-    rows = Expense.objects.filter(user = request.user).values_list('amount','description','category__name','date')
+    rows = Expense.objects.filter(user = request.user).values_list('amount','description','category__name','date') if tab!='income' else Income.objects.filter(user = request.user).values_list('amount','description','source__name','date')
 
     fontStyle = xlwt.XFStyle()
     fontStyle.font.bold = False
@@ -220,14 +242,23 @@ def exportExcel(request):
 
 @login_required(login_url='login')
 def exportPDF(request):
+    tab = request.GET['tab']
     response = HttpResponse(content_type = 'application/pdf')
-    response['Content-Disposition'] = 'inline;attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.pdf'
+    if tab=="income":
+        response['Content-Disposition'] = 'inline;attachment;filename = Incomes_' + str(datetime.datetime.now()) + '.pdf'
+    else:
+        response['Content-Disposition'] = 'inline;attachment;filename = Expenses_' + str(datetime.datetime.now()) + '.pdf'
 
-    expenses = Expense.objects.all()
-    total = 0
+    data = Expense.objects.filter(user=request.user) if tab!='income' else Income.objects.filter(user=request.user)
+
+    if UserPreference.objects.filter(user=request.user).exists():
+        currency = UserPreference.objects.get(user = request.user).currency
+    else:
+        currency = ""
     context = {
-        'expenses':expenses,
-        'total' : total
+        'data':data,
+        'tab':tab,
+        'currency':currency
         }
     template_path = 'pdf.html'    
   
