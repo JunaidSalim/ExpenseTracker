@@ -269,3 +269,6 @@ def exportPDF(request):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+def testt(request):
+    return render(request,'test.html')
