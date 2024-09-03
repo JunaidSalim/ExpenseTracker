@@ -22,10 +22,10 @@
 <body>
   <header class="bg-black text-white text-2xl p-2 flex justify-between">
     <div class="flex ml-5 gap-2">
-      <img class="w-auto h-8" src="logo.png" alt="logo">
+      <img class="w-auto h-8" src="{% static 'img/logo.png' %}" alt="logo">
       <h1 class="">Expense Tracker</h1>
     </div>
-    <h2 class="mr-5">Welcome JS</h2>
+    <h2 class="mr-5">Welcome {{request.user.username}}</h2>
   </header>
 
   {% include "components/messages.html" %}
