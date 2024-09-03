@@ -1,72 +1,52 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container mt-4">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="{% url 'expenses' %}">Expenses</a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">Add Expense</li>
-    </ol>
-  </nav>
+<div class="container mx-auto mt-8">
+    <nav class="flex mb-4 text-2xl mx-4" aria-label="breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{% url 'expenses' %}" class="text-blue-600 hover:text-blue-800">Expenses</a>
+            </li>
+            <li aria-current="page">
+                <span class="text-gray-500">/ Add Expense</span>
+            </li>
+        </ol>
+    </nav>
 
-  <div class="card">
-    <div class="card-body">
-      <form action="{% url 'add-expense' %}" method="post">
-        {% include 'components/messages.html' %}
-        {% csrf_token %}
-        <div class="mb-3">
-          <label for="amount" class="form-label">Amount</label>
-          <input
-          required
-            type="text"
-            class="form-control form-control-sm"
-            name="amount"
-            id="amount"
-            value="{{ values.amount }}"
-          />
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            name="description"
-            id="description"
-            value="{{ values.description }}"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <label for="category" class="form-label">Category</label>
-          <select class="form-select form-select-sm" name="category" id="category" required>
-            {% for category in categories %}
-            <option value="{{ category.name }}">{{ category.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="mb-3">
-          <label for="expense_date" class="form-label">Date of Expense</label>
-          <input
-          required
-            type="date"
-            class="form-control form-control-sm"
-            name="date"
-            id="expense_date"
-            value="{{ values.date }}"
-          />
-        </div>
-        <div class="">
-            <input
-              type="submit"
-              value="Submit"
-              class="btn btn-primary btn-md"
-            />
-          </div>
-      </form>
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form action="{% url 'add-expense' %}" method="post">
+            {% include 'components/messages.html' %}
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                <input required type="text" name="amount" id="amount" value="{{ values.amount }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <input required type="text" name="description" id="description" value="{{ values.description }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                <select required name="category" id="category"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    {% for category in categories %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="expense_date" class="block text-sm font-medium text-gray-700">Date of Expense</label>
+                <input required type="date" name="date" id="expense_date" value="{{ values.date }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div>
+                <input type="submit" value="Submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" />
+            </div>
+        </form>
     </div>
-  </div>
 </div>
 
 {% endblock %}
