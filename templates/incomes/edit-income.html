@@ -1,58 +1,55 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-11">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{% url 'incomes'%}">Incomes</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                        Edit Income
-                    </li>
-                </ol>
-            </nav>
-        </div>
-
-        <div class="col-md-1">
-            <a href="{% url 'delete-income' income.id %}" class="btn btn-danger btn-sm">Delete</a>
-        </div>
+<div class="container mx-auto mt-8">
+    <div class="flex justify-between items-center mb-4 mx-4">
+        <nav class="flex text-2xl" aria-label="breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{% url 'incomes'%}" class="text-blue-600 hover:text-blue-800">Incomes</a>
+                </li>
+                <li aria-current="page">
+                    <span class="text-gray-500">/ Edit Income</span>
+                </li>
+            </ol>
+        </nav>
+        <a href="{% url 'delete-income' income.id %}"
+            class="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600">Delete</a>
     </div>
 
-    <div class="card">
-        <div class="card-body">
-            <form action="{% url 'edit-income' income.id %}" method="post">
-                {% include 'components/messages.html'%} {% csrf_token %}
-                <div class="mb-3">
-                    <label for="amount" class="form-label">Amount</label>
-                    <input required type="text" class="form-control form-control-sm" name="amount" id="amount"
-                        value="{{ income.amount }}" />
-                </div>
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <input type="text" class="form-control form-control-sm" name="description" id="description"
-                        value="{{ income.description }}" required />
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Source</label>
-                    <select class="form-select form-select-sm" name="source" required>
-                        <option selected name="source" value="{{income.source}}">{{income.source}}</option>
-                        {% for source in sources%}
-                        <option name="source" value="{{source.name}}">{{source.name}}</option>
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form action="{% url 'edit-income' income.id %}" method="post">
+            {% include 'components/messages.html'%}
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                <input required type="text" name="amount" id="amount" value="{{ income.amount }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <input required type="text" name="description" id="description" value="{{ income.description }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="source" class="block text-sm font-medium text-gray-700">Source</label>
+                <select required name="source"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    <option selected value="{{income.source}}">{{income.source}}</option>
+                    {% for source in sources %}
+                    <option value="{{source.name}}">{{source.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="date" class="block text-sm font-medium text-gray-700">Date of Income</label>
+                <input type="date" name="date" value="{{income.date |date:'Y-m-d' }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
 
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="" class="form-label">Date of Income</label>
-                    <input type="date" value="{{income.date |date:'Y-m-d' }}" class="form-control form-control-sm"
-                        name="date" />
-                </div>
-
-                <input type="submit" value="Save" class="btn btn-primary btn-primary-sm" />
-            </form>
-        </div>
+            <input type="submit" value="Save"
+                class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" />
+        </form>
     </div>
 </div>
 

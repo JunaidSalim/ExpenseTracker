@@ -18,7 +18,7 @@ def incomes(request):
     except:
         currency = ""
     incomes = Income.objects.filter(user = request.user)
-    paginator = Paginator(incomes, 10)
+    paginator = Paginator(incomes, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
     context = {

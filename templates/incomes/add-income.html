@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="container mt-4">
+<!-- <div class="container mt-4">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
@@ -67,6 +67,56 @@
       </form>
     </div>
   </div>
+</div> -->
+
+<div class="container mx-auto mt-8">
+  <nav class="flex mb-4 text-2xl mx-4" aria-label="breadcrumb">
+      <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+              <a href="{% url 'incomes' %}" class="text-blue-600 hover:text-blue-800">Incomes</a>
+          </li>
+          <li aria-current="page">
+              <span class="text-gray-500">/ Add Income</span>
+          </li>
+      </ol>
+  </nav>
+
+  <div class="bg-white shadow-md rounded-lg p-6">
+      <form action="{% url 'add-income' %}" method="post">
+          {% include 'components/messages.html' %}
+          {% csrf_token %}
+          <div class="mb-4">
+              <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+              <input required type="text" name="amount" id="amount" value="{{ values.amount }}"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+          <div class="mb-4">
+              <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+              <input required type="text" name="description" id="description" value="{{ values.description }}"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+          <div class="mb-4">
+              <label for="source" class="block text-sm font-medium text-gray-700">Source</label>
+              <select required name="source" id="source"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                  {% for source in sources %}
+                  <option value="{{ source.name }}">{{ source.name }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+          <div class="mb-4">
+              <label for="income_date" class="block text-sm font-medium text-gray-700">Date of Income</label>
+              <input required type="date" name="date" id="income_date" value="{{ values.date }}"
+                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+          </div>
+          <div>
+              <input type="submit" value="Submit"
+                  class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+      </form>
+  </div>
 </div>
+
+
 
 {% endblock %}

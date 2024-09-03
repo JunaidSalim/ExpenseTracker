@@ -2,118 +2,161 @@
 {% load static %}
 {% block content %}
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-10">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'incomes' %}">Incomes</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">My Incomes</li>
-                </ol>
-            </nav>
-        </div>
-
-        <div class="col-md-2">
-            <a href="{% url 'add-income' %}" class="btn btn-primary">Add Income</a>
-        </div>
+<!-- Income Heading -->
+<div class="flex justify-between mx-2 my-4">
+    <div class="text-3xl text-slate-800">
+        <h2>Incomes</h2>
     </div>
-    {% if incomes.count %}
-    <div class="row my-2 mx-4">
-        <div class="col-md-8">
-            <a href="{% url 'export-csv' %}?tab=income" class="btn btn-secondary">Export CSV</a>
-            <a href="{% url 'export-excel' %}?tab=income" class="btn btn-secondary">Export Excel(.xls)</a>
-            <a href="{% url 'export-pdf' %}?tab=income" class="btn btn-secondary" target="_blank">Export PDF</a>
-        </div>
-        <div class="col-md-4">
+    <div>
+        <a href="{% url 'add-income' %}"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Add
+            Income</a>
+    </div>
+</div>
+{% if incomes.count %}
+<!-- Button and Search Bar  -->
+<div class="flex justify-between items-center mt-1">
+    <div>
+        <a href="{% url 'export-excel' %}?tab=income"
+            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base p-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Export
+            Excel<span class="text-slate-200">(.xls)</span> </a>
+        <a href="{% url 'export-pdf' %}?tab=income" target="_blank"
+            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base  p-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Export
+            PDF</a>
+        <a href="{% url 'export-csv' %}?tab=income"
+            class="focus:outline-none text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-base p-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Export
+            CSV</a>
+    </div>
+    <div class="w-[40%] mr-4">
 
-            <div class="form-group">
-                <input type="text" class="form-control" id="searchField" placeholder="Search">
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                </svg>
             </div>
+            <input type="search" id="searchField"
+                class="form-control block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search Incomes" required />
         </div>
     </div>
+</div>
 
-    <div class="app-table">
+<!-- table  -->
+<div class="app-table relative overflow-x-auto shadow-md sm:rounded-lg my-4 mr-4 border-black border-2">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Amount({{currency}})
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Source
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Description
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for income in page_obj %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    {{income.amount}}
+                </th>
+                <td class="px-6 py-4">
+                    {{income.source}}
+                </td>
+                <td class="px-6 py-4">
+                    {{income.description}}
+                </td>
+                <td class="px-6 py-4">
+                    {{income.date}}
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="{% url 'edit-income' income.id %}"
+                        class="font-medium text-blue-600 dark:text-blue-500 border-blue-800 bg-slate-200 rounded border-2 px-2 py-1 hover:underline">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-        <table class="table table-stripped table-hover">
-            <thead>
-                <tr>
-                    <th>Amount ({{currency}})</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th></th>
-                </tr>
-            </thead>
+<p class="no-results text-2xl" style="display: none;">No results </p>
 
-            <tbody>
-                {% for income in page_obj %}
-                <tr>
-                    <td>{{income.amount}}</td>
-                    <td>{{income.category}}</td>
-                    <td>{{income.description}}</td>
-                    <td>{{income.date}}</td>
+<div class="table-output relative overflow-x-auto shadow-md sm:rounded-lg my-4 mr-4 border-black border-2">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Amount({{currency}})
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Source
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Description
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
 
-                    <td>
-                        <a href="{% url 'edit-income' income.id %}" class="btn btn-secondary btn-sm">Edit</a>
-                    </td>
-                </tr>
+        </tbody>
+    </table>
+</div>
 
-                {% endfor %}
-            </tbody>
-        </table>
+<!-- pagination -->
+
+<div class="pagination-container flex flex-col items-center">
+    <!-- Help text -->
+    <span class="text-sm text-gray-700 dark:text-gray-400">
+        Showing Page <span class="font-semibold text-gray-900 dark:text-white">{{ page_obj.number }}</span> of <span
+            class="font-semibold text-gray-900 dark:text-white">{{ page_obj.paginator.num_pages }}</span>
+    </span>
+    <!-- Buttons -->
+    <div class="inline-flex mt-2 xs:mt-0">
+        {% if page_obj.has_previous %}
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {%if page_obj.number == 1 %}active{% endif %}"
+            href="?page=1">
+            &laquo; First
+        </a>
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800  hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            href="?page={{ page_obj.previous_page_number }}">
+            Prev
+        </a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            href="?page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {%if page_obj.number == 1 %}active{% endif %}"
+            href="?page={{ page_obj.paginator.num_pages }}">
+            Last &raquo;
+        </a>
+        {% endif %}
     </div>
-    <p class="no-results" style="display: none;">No results </p>
-    
-    <div class="table-output">
-        <table class="table table-stripped table-hover">
-            <thead>
-                <tr>
-                    <th>Amount ({{currency}})</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody class="table-body">
+</div>
 
 
-            </tbody>
-        </table>
-    </div>
-
-    <div class="pagination-container row ">
-        <div class="col-10">
-            Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </div>
-        <ul class="pagination justify-content-end col-2">
-            {% if page_obj.has_previous %}
-            <li class="page-item {% if page_obj.number == 1 %}active{% endif %}">
-                <a class="page-link" href="?page=1">&laquo; 1</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-            </li>
-            {% endif %}
-
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
-
-                    {{ page_obj.paginator.num_pages}} &raquo;</a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-
-    {% else %}
-    <h2>No Incomes To Show!</h2>
-    {% endif %}
-
-    <script src="{% static 'js/searchIncomes.js' %}">
-    </script>
-    {% endblock content %}
+{% else %}
+<h2>No Incomes To Show!</h2>
+{% endif %}
+<script src="{% static 'js/searchIncomes.js' %}">
+</script>
+{% endblock content %}
