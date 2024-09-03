@@ -115,7 +115,7 @@ def expenses(request):
     except:
         currency = ""
     expenses = Expense.objects.filter(user = request.user)
-    paginator = Paginator(expenses, 10)
+    paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
     context = {

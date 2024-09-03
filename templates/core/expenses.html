@@ -195,26 +195,69 @@
     </table>
 </div>
 
+<p class="no-results text-2xl" style="display: none;">No results </p>
+
+<div class="table-output relative overflow-x-auto shadow-md sm:rounded-lg my-4 mr-4 border-black border-2">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Amount({{currency}})
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Category
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Description
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Date
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+
+        </tbody>
+    </table>
+</div>
+
 <!-- pagination -->
 
-<div class="flex flex-col items-center">
+<div class="pagination-container flex flex-col items-center">
     <!-- Help text -->
     <span class="text-sm text-gray-700 dark:text-gray-400">
-        Showing Page <span class="font-semibold text-gray-900 dark:text-white">1</span> of <span
-            class="font-semibold text-gray-900 dark:text-white">5</span>
+        Showing Page <span class="font-semibold text-gray-900 dark:text-white">{{ page_obj.number }}</span> of <span
+            class="font-semibold text-gray-900 dark:text-white">{{ page_obj.paginator.num_pages }}</span>
     </span>
     <!-- Buttons -->
     <div class="inline-flex mt-2 xs:mt-0">
-        <button
-            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+        {% if page_obj.has_previous %}
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-s hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {%if page_obj.number == 1 %}active{% endif %}"
+            href="?page=1">
+            &laquo; First
+        </a>
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800  hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            href="?page={{ page_obj.previous_page_number }}">
             Prev
-        </button>
-        <button
-            class="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+        </a>
+        {% endif %}
+        {% if page_obj.has_next %}
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 border-0 border-s border-gray-700 hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            href="?page={{ page_obj.next_page_number }}">
             Next
-        </button>
+        </a>
+        <a class="page-link flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-e hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white {%if page_obj.number == 1 %}active{% endif %}"
+            href="?page={{ page_obj.paginator.num_pages }}">
+            Last &raquo;
+        </a>
+        {% endif %}
     </div>
 </div>
+
+
 {% else %}
 <h2>No Expenses To Show!</h2>
 {% endif %}

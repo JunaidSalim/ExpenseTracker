@@ -29,11 +29,11 @@ searchField.addEventListener("keyup", (e) => {
                 } else {
                     noResults.style.display = "none";
                     data.forEach((item) => {
-                        tablebody.innerHTML += `<tr>
-                  <td>${item.amount}</td>
-                  <td>${item.category}</td>
-                  <td>${item.description}</td>
-                  <td>${item.date}</td>
+                        tablebody.innerHTML += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                  <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${item.amount}</td>
+                  <td class="px-6 py-4">${item.category}</td>
+                  <td class="px-6 py-4">${item.description}</td>
+                  <td class="px-6 py-4">${item.date}</td>
                   </tr>`;
                     });
                 }
