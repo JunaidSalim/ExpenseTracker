@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 import json
 from django.db.models import Q, F
 from django.http import JsonResponse
+import datetime
 
 # Create your views here.
 @login_required(login_url='login')
@@ -17,7 +18,7 @@ def incomes(request):
         currency = UserPreference.objects.get(user = request.user).currency
     except:
         currency = ""
-    incomes = Income.objects.filter(user = request.user)
+    incomes = Income.objects.filter(user = request.user).order_by('-date')
     paginator = Paginator(incomes, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -125,3 +126,34 @@ def searchIncome(request):
 
     else:
         return redirect('home')
+    
+
+@login_required(login_url='login')
+def incomes_summary(request):
+    today_date = datetime.date.today()
+    month_ago = today_date - datetime.timedelta(days = 30)
+    incomes =  Income.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
+    result = {}
+
+    def get_catgeory(income):
+        return income.source.name
+    
+    def get_income_source_amount(source):
+        amount = 0
+        filtered_by_source = incomes.filter(source__name = source)
+
+        for item in filtered_by_source:
+            amount+=item.amount
+        
+        return amount
+
+    source_list = list(set(map(get_catgeory,incomes)))
+    print(source_list)
+    for x in incomes:
+        for y in source_list:
+            result[y] = get_income_source_amount(y)
+
+    return JsonResponse({'income_source_data':result}, safe=False)
+
+def stats(request):
+    return render(request,'incomes/stats.html')

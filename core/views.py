@@ -114,7 +114,7 @@ def expenses(request):
         currency = UserPreference.objects.get(user = request.user).currency
     except:
         currency = ""
-    expenses = Expense.objects.filter(user = request.user)
+    expenses = Expense.objects.filter(user = request.user).order_by('-date')
     paginator = Paginator(expenses, 5)
     page_number = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_number)
@@ -163,7 +163,6 @@ def expenses_summary(request):
         return amount
 
     category_list = list(set(map(get_catgeory,expenses)))
-    print(category_list)
     for x in expenses:
         for y in category_list:
             result[y] = get_expense_category_amount(y)
@@ -269,6 +268,3 @@ def exportPDF(request):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-
-def testt(request):
-    return render(request,'test.html')
