@@ -1,110 +1,5 @@
 {% load static %}
 {% load static tailwind_tags %}
-
-<!-- <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-  <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
-    aria-labelledby="sidebarMenuLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="sidebarMenuLabel">Expense Tracker</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
-        aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2 active" aria-current="page" href="#">
-            <svg class="bi">
-              <use xlink:href="#house-fill" />
-            </svg>
-            Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="{% url 'expenses' %}">
-            <svg class="bi">
-              <use xlink:href="#cart" />
-            </svg>
-            Expenses
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="{% url 'incomes' %}">
-            <svg class="bi">
-              <use xlink:href="#file-earmark" />
-            </svg>
-            Incomes
-          </a>
-        </li>
-      </ul>
-
-      <h6
-        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-        <span>Summary</span>
-          <svg class="bi">
-          </svg>
-        </a>
-      </h6>
-      <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="{% url 'stats' %}">
-            <svg class="bi">
-              <use xlink:href="#file-earmark-text" />
-            </svg>
-            Expense Summary
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
-            <svg class="bi">
-              <use xlink:href="#file-earmark-text" />
-            </svg>
-            Income Summary
-          </a>
-        </li>
-
-      </ul>
-
-
-      <h6
-        class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-        <span>Settings</span>
-        <a class="link-secondary" href="#" aria-label="Add a new report">
-          <svg class="bi">
-            <use xlink:href="#plus-circle" />
-          </svg>
-        </a>
-      </h6>
-      <ul class="nav flex-column mb-auto">
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="{% url 'preference' %}">
-            <svg class="bi">
-              <use xlink:href="#file-earmark-text" />
-            </svg>
-            General
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="#">
-            <svg class="bi">
-              <use xlink:href="#gear-wide-connected" />
-            </svg>
-            Account
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link d-flex align-items-center gap-2" href="{% url 'logout' %}">
-            <svg class="bi">
-              <use xlink:href="#door-closed" />
-            </svg>
-            Sign out
-          </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div> -->
-
-
   <div class="flex gap-2 items-center m-2 text-blue-700">
       <div class=" ">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="blue" class="size-4">
@@ -115,7 +10,7 @@
           </svg>
       </div>
       <div class="text-sm">
-          <h3>Dashboard</h3>
+          <a href="{% url 'home' %}">Dashboard</a>
       </div>
   </div>
 
@@ -127,7 +22,7 @@
           </svg>
       </div>
       <div class="text-sm">
-          <h3>Expenses</h3>
+        <a href="{% url 'expenses' %}">Expenses</a>
       </div>
   </div>
 
@@ -144,7 +39,8 @@
 
       </div>
       <div class="text-sm">
-          <h3>Incomes</h3>
+        <a href="{% url 'incomes' %}">Incomes</a>
+
       </div>
   </div>
 
@@ -165,7 +61,7 @@
 
           </div>
           <div class="text-sm">
-              <h3>Expense Summary</h3>
+            <a href="{% url 'expense-stats' %}">Expense Summary</a>
           </div>
       </div>
       <div class="flex gap-2 items-center m-2 text-blue-700">
@@ -179,7 +75,8 @@
 
           </div>
           <div class="text-sm">
-              <h3>Income Summary</h3>
+            <a href="{% url 'home' %}">Income Summary</a>
+
           </div>
       </div>
   </div>
@@ -201,7 +98,7 @@
 
           </div>
           <div class="text-sm">
-              <h3>General</h3>
+            <a href="{% url 'preference' %}">General</a>
           </div>
       </div>
       <div class="flex gap-2 items-center m-2 text-blue-700">
@@ -214,7 +111,7 @@
 
           </div>
           <div class="text-sm">
-              <h3>Account</h3>
+            <a href="{% url 'home' %}">Account</a>
           </div>
       </div>
       <div class="flex gap-2 items-center m-2 text-blue-700">
@@ -227,7 +124,7 @@
 
           </div>
           <div class="text-sm">
-              <h3>Sign out</h3>
+            <a href="{% url 'logout' %}">Sign out</a>
           </div>
       </div>
   </div>
