@@ -7,6 +7,8 @@ from validate_email import validate_email
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 class UsernameValidationView(View):
@@ -117,3 +119,14 @@ class ProfileView(LoginRequiredMixin, View):
         user.save()
         messages.success(request,"Changes Saved Successfully")
         return redirect('profile')
+    
+@login_required(login_url='login')
+def deleteProfile(request):
+    try:
+        user = User.objects.get(id=request.user.id)
+        user.delete()
+        messages.success(request,'Account Deleted Successfully')
+        return redirect('register')
+    except:
+        messages.error(request,"User Doesnot Exist")
+        return redirect('register')
