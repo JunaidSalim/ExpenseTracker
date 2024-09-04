@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from validate_email import validate_email
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 class UsernameValidationView(View):
@@ -83,3 +84,36 @@ class LogoutView(View):
         messages.success(request,'You have been logged out')
         return redirect('login')
     
+
+class ProfileView(LoginRequiredMixin, View):
+    login_url = 'login'  
+
+    def get(self, request):
+        user_id = request.user.id
+        user = User.objects.get(id=user_id)
+
+        context = {
+            "user" : user
+        }
+        return render(request, 'authentication/profile.html',context)
+
+    def post(self, request):
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        password = request.POST['password']
+
+        user = User.objects.get(id=request.user.id)
+
+        user.first_name = first_name
+        user.last_name = last_name
+
+        if password:
+            if len(password)<6:
+                messages.error(request,"Password Should be atleast 6 characters")
+                return redirect('profile')
+            else:
+                user.set_password(password)
+
+        user.save()
+        messages.success(request,"Changes Saved Successfully")
+        return redirect('profile')

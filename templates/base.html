@@ -26,8 +26,9 @@
         <h1 class="text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Expense Tracker</h1>
       </div>
     </div>
-    <h2 class="mr-5 text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Welcome
-      {{request.user.username}}</h2>
+    <h2 class="mr-5 text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Welcome {% if user.first_name %}{{request.user.first_name}}
+      {% else %}
+      {{request.user.username}}{% endif %}</h2>
   </header>
 
   {% include "components/messages.html" %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mx-auto mt-8">
+    <div class="flex justify-between items-center mb-4 mx-4">
+        <h1 class="text-4xl font-extrabold leading-none tracking-tight text-black  dark:text-white">Account</h1>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <form action="{% url 'profile' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-4 flex gap-2">
+                <div class="w-[50%]">
+                    <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                    <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+                <div class="w-[50%]">
+                    <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                    <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input required type="text" disabled name="username" id="username" value="{{ user.username }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input required type="text" disabled name="email" id="email" value="{{ user.email }}"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">New Password</label>
+                <input type="text" name="password" id="password"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+           
+            <input type="submit" value="Save"
+                class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" />
+        </form>
+    </div>
+</div>
+
+{% endblock %}
