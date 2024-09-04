@@ -148,7 +148,6 @@ def incomes_summary(request):
         return amount
 
     source_list = list(set(map(get_catgeory,incomes)))
-    print(source_list)
     for x in incomes:
         for y in source_list:
             result[y] = get_income_source_amount(y)
