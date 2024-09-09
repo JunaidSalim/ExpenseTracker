@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="flex justify-between py-3">
+    {% if currency %}
+    <div class="px-8 py-2">
+        <h4 class="text-lg text-gray-500 font-thin uppercase">Currency</h4>
+        <a href="{% url 'preference' %}">
+            <h4 class="text-2xl font-semibold">{{currency}}</h4>
+        </a>
+    </div>
+    {% endif %}
+    <div class="px-8 py-2">
+        <h4 class="text-lg text-gray-500 font-thin uppercase">Total Balance</h4>
+        <h4 class="text-2xl font-semibold">{{balance}}</h4>
+    </div>
+    <div class="px-8 py-2">
+        <h4 class="text-lg text-gray-500 font-thin uppercase">Last 30 Days</h4>
+        <h4 class="text-2xl font-semibold">{{last_30_days_balance}}</h4>
+    </div>
+    <div class="px-8 py-2">
+        <h4 class="text-lg text-gray-500 font-thin uppercase">{{last_month_name}}</h4>
+        <h4 class="text-2xl font-semibold">{{last_month_balance}}</h4>
+    </div>
+</div>
+<div class="flex space-x-0 flex-col lg:flex-row lg:space-x-2 my-2 px-6">
+    <div class="bg-green-600 p-4 border-2 rounded-md shadow-lg  w-full text-white text-center">
+            <a href="{% url 'incomes' %}">
+            <h1 class="text-xl font-light">TOTAL INCOME</h1>
+            <h1 class="text-2xl text-green-100 font-semibold">{{total_incomes}}</h1>
+        </a>
+    </div>
+    <div class="bg-red-600 p-4 border-2 rounded-md shadow-lg  w-full text-white text-center">
+        <a href="{% url 'expenses' %}">
+        <h1 class="text-xl font-light">TOTAL EXPENSE</h1>
+        <h1 class="text-2xl text-red-100 font-semibold">{{total_expenses}}</h1>
+    </a>
+    </div>
+</div>
+<div class="flex space-x-0 flex-col lg:flex-row lg:space-x-2 my-2 px-6">
+    <div class="bg-slate-800 p-4 border-2 rounded-md shadow-lg  w-full text-white text-center">
+        <h1 class="text-xl font-light">LAST 30 DAYS</h1>
+        <div class="flex justify-center gap-4">
+            <h1 class="text-2xl text-green-500 font-semibold">{{incomes_last_30_days}}</h1>
+            <h1 class="text-2xl text-red-500 font-semibold">{{expenses_last_30_days}}</h1>
+        </div>
+    </div>
+    <div class="bg-teal-800 p-4 border-2 rounded-md shadow-lg  w-full text-white text-center">
+        <h1 class="text-xl font-light uppercase">LAST MONTH - {{last_month_name}}</h1>
+        <div class="flex justify-center gap-4">
+            <h1 class="text-2xl text-green-500 font-semibold">{{incomes_last_month}}</h1>
+            <h1 class="text-2xl text-red-500 font-semibold">{{expenses_last_month}}</h1>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}

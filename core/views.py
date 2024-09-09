@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views import View
+from django.contrib.auth.models import User
 from .models import Category, Expense
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from preferences.models import UserPreference
 from django.core.paginator import Paginator
 import json
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum
 from django.http import JsonResponse, HttpResponse
 import datetime
 import csv
@@ -15,16 +16,60 @@ import xlwt
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from incomes.models import Income
-import base64
-import os
-from django.conf import settings
-from pathlib import Path
 from preferences.models import UserPreference
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your views here.
 @login_required(login_url='auth/login')
 def index(request):
-    return render(request,'base.html')
+
+    total_expenses = Expense.objects.aggregate(total=Sum('amount'))['total']
+    total_incomes = Income.objects.aggregate(total=Sum('amount'))['total']
+
+    today = timezone.now().date()
+    first_day_of_current_month = today.replace(day=1)
+    last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+    first_day_of_last_month = last_day_of_last_month.replace(day=1)
+    last_month_name = last_day_of_last_month.strftime('%B')
+
+    expenses_last_month =Expense.objects.filter(date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total']
+    
+    incomes_last_month = Income.objects.filter(date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total']
+
+
+    thirty_days_ago = today - timedelta(days=30)
+
+    expenses_last_30_days = Expense.objects.filter(date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total']
+
+    incomes_last_30_days = Income.objects.filter(date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total']
+
+    balance = total_incomes - total_expenses
+    last_month_balance = incomes_last_month - expenses_last_month
+    last_30_days_balance = incomes_last_30_days - expenses_last_30_days
+
+    user = User.objects.get(id=request.user.id)
+    try:
+        currency = UserPreference.objects.get(user = user).currency
+    except:
+        currency = ""
+
+    context = {
+        'balance':balance,
+        'currency':currency,
+        'last_month_balance':last_month_balance,
+        'last_30_days_balance':last_30_days_balance,
+        'total_expenses':total_expenses,
+        'total_incomes':total_incomes,
+        'expenses_last_month':expenses_last_month,
+        'incomes_last_month':incomes_last_month,
+        'last_month_name':last_month_name,
+        'expenses_last_30_days':expenses_last_30_days,
+        'incomes_last_30_days':incomes_last_30_days,
+    }
+    return render(request,'dashboard.html',context)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addExpense(View):
@@ -268,3 +313,6 @@ def exportPDF(request):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+    
