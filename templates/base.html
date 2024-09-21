@@ -19,14 +19,32 @@
 </head>
 
 <body>
-  <header class="bg-black text-white text-2xl p-2 flex justify-between">
-    <div class="flex ml-5 gap-2">
-      <img class="w-auto h-8" src="{% static 'img/logo.png' %}" alt="logo">
+  <header class="bg-black text-white p-2 flex justify-between">
+    <button data-collapse-toggle="navbar-default" type="button"
+      class="inline-flex items-center p-2 w-7 h-7 justify-center text-sm text-gray-100 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+      aria-controls="navbar-default" aria-expanded="false">
+      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M1 1h15M1 7h15M1 13h15" />
+      </svg>
+    </button>
+    <h2
+      class="md:hidden mr-2 md:mr-5 text-xl md:text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">
+      Welcome {% if user.first_name %}{{request.user.first_name}}
+      {% else %}
+      {{request.user.username}}{% endif %}</h2>
+    <img class="md:hidden w-auto h-6 md:h-8" src="{% static 'img/logo.png' %}" alt="logo">
+
+    <div class="hidden md:flex ml-5 gap-2">
+      <img class="w-auto h-6 md:h-8" src="{% static 'img/logo.png' %}" alt="logo">
       <div>
-        <h1 class="text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Expense Tracker</h1>
+        <h1 class="text-xl md:text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Expense
+          Tracker</h1>
       </div>
     </div>
-    <h2 class="mr-5 text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">Welcome {% if user.first_name %}{{request.user.first_name}}
+    <h2
+      class="hidden md:block mr-2 md:mr-5 text-xl md:text-3xl font-extrabold leading-none tracking-tight text-white  dark:text-white">
+      Welcome {% if user.first_name %}{{request.user.first_name}}
       {% else %}
       {{request.user.username}}{% endif %}</h2>
   </header>
@@ -35,11 +53,11 @@
 
   <section class="grid grid-cols-12 gap-4">
 
-    <section class="col-span-2 p-4 bg-blue-50 border-2 border-blue-100">
+    <section class="hidden md:block md:col-span-3 lg:col-span-2 p-4 bg-blue-50 border-2 border-blue-100">
       {% include "components/sidebar.html" %}
     </section>
 
-    <main class="col-span-10">
+    <main class="col-span-12 md:col-span-9 lg:col-span-10">
       {% block content %}
 
       {% endblock content %}
