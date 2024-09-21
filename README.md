@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Expense Tracker is a fully functional and responsive web application built using **Django** and styled with **Tailwind CSS**. This project not only serves as a personal expense and income tracking tool but also demonstrates how Tailwind CSS can be integrated seamlessly with Django. The app includes features such as CRUD operations for managing expenses and incomes, user authentication, and exporting data to various formats.
+Expense Tracker is a fully responsive web application developed using **Django** and seamlessly integrated with **Tailwind CSS**. Designed to efficiently manage personal finances, the application allows users to track their expenses and incomes through a user-friendly interface. Key features include robust user authentication, full CRUD functionality for managing expenses and incomes, and the ability to export financial data in various formats, such as PDF, CSV, and Excel. This project not only serves as a practical financial tool but also showcases the integration of Tailwind CSS with Django to create a modern, responsive user experience.
 
 This project significantly contributed to the enhancement of my knowledge in **Django** and **Tailwind CSS**.
 
@@ -12,7 +12,7 @@ This project significantly contributed to the enhancement of my knowledge in **D
 - **User Authentication**: Users can sign up, log in, and manage their own accounts securely.
 - **CRUD Operations**: Full create, read, update, and delete (CRUD) functionality for both expenses and incomes.
 - **Data Export**: Users can export their financial data (incomes and expenses) in PDF, CSV, and Excel formats.
-- **Summaries and Stats**: Provides detailed summaries and statistics of incomes and expenses for better financial insights.
+- **Summaries and Stats**: Provides summaries and statistics of incomes and expenses for better financial insights.
 
 ## Tech Stack
 
@@ -61,18 +61,27 @@ To set up this project locally, follow these steps:
    ```bash
    python manage.py migrate
    ```
-
-5. **Run the development server:**
+5. Configure .env
+    ```bash
+    ENVIRONMENT=development
+    SECRET_KEY=YOUR_SECRET_KEY
+    DB_NAME=YOUR_DATABASE_NAME
+    DB_USER=YOUR_DATABASE_USER
+    DB_PASSWORD=YOUR_DATABASE_PASSWORD
+    DB_HOST=YOUR_DATABASE_HOST
+    DB_PORT=YOUR_DATABASE_PORT
+    ```
+6. **Run the development server:**
    ```bash
    python manage.py runserver
    ```
 
-6. **Build Tailwind CSS:**
+7. **Build Tailwind CSS:**
    ```bash
    npm run build
    ```
 
-7. Open your browser and go to `http://127.0.0.1:8000/` to view the app.
+8. Open your browser and go to `http://127.0.0.1:8000/` to view the app.
 
 
 ## Contributing
