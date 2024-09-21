@@ -6,7 +6,7 @@ const renderdouChart = (data, labels) => {
         labels: labels,
         datasets: [
           {
-            label: "Last month Incomes",
+            label: "Last 30 Days Incomes",
             data: data,
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
@@ -48,7 +48,7 @@ const renderbarChart = (data, labels) => {
       labels: labels,
       datasets: [
         {
-          label: "Last month Incomes",
+          label: "Last 30 Days Incomes",
           data: data,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",

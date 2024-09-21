@@ -1,4 +1,4 @@
-const renderdouChart = (data, labels) => {
+const renderdouChart = (data, labels,value) => {
   var ctx = document.getElementById("douChart").getContext("2d");
   var myChart = new Chart(ctx, {
     type: "doughnut",
@@ -6,7 +6,7 @@ const renderdouChart = (data, labels) => {
       labels: labels,
       datasets: [
         {
-          label: "Last month expenses",
+          label: `${value} Expenses`,
           data: data,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
@@ -37,7 +37,7 @@ const renderdouChart = (data, labels) => {
   });
 };
 
-const renderbarChart = (data, labels) => {
+const renderbarChart = (data, labels,value) => {
 
   var ctx = document.getElementById("barChart").getContext("2d");
   var myChart = new Chart(ctx, {
@@ -46,7 +46,7 @@ const renderbarChart = (data, labels) => {
       labels: labels,
       datasets: [
         {
-          label: "Last month Expenses",
+          label: `${value} Expenses`,
           data: data,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
@@ -84,20 +84,35 @@ const renderbarChart = (data, labels) => {
   });
 };
 
-const getChartData = () => {
-  fetch("/expense-summary")
+const getChartData = (value) => {
+  fetch(`/expense-summary?value=${value}`)
     .then((res) => res.json())
     .then((results) => {
-      console.log("results", results);
       const category_data = results.expense_category_data;
       const [labels, data] = [
         Object.keys(category_data),
         Object.values(category_data),
       ];
 
-      renderbarChart(data, labels);
-      renderdouChart(data, labels);
+      data_key = {
+        "all" : "All",
+        "last_month": "Last Month",
+        "last_30_days": "Last 30 Days"
+      }
+
+      console.log(data_key[value])
+      renderbarChart(data, labels, data_key[value]);
+      renderdouChart(data, labels, data_key[value]);
+
     });
 };
 
-window.onload = getChartData();
+let filterbutton = document.getElementById('options')
+let filterOption = filterbutton.value
+
+filterbutton.addEventListener('change', (e) => {
+   window.location.reload()
+});
+
+
+document.onload = getChartData(value = filterOption);

@@ -24,8 +24,8 @@ from datetime import timedelta
 @login_required(login_url='auth/login')
 def index(request):
 
-    total_expenses = Expense.objects.aggregate(total=Sum('amount'))['total']
-    total_incomes = Income.objects.aggregate(total=Sum('amount'))['total']
+    total_expenses = Expense.objects.filter(user = request.user).aggregate(total=Sum('amount'))['total'] or 0
+    total_incomes = Income.objects.filter(user = request.user).aggregate(total=Sum('amount'))['total'] or 0
 
     today = timezone.now().date()
     first_day_of_current_month = today.replace(day=1)
@@ -33,22 +33,23 @@ def index(request):
     first_day_of_last_month = last_day_of_last_month.replace(day=1)
     last_month_name = last_day_of_last_month.strftime('%B')
 
-    expenses_last_month =Expense.objects.filter(date__gte=first_day_of_last_month, 
-date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total']
+    expenses_last_month =Expense.objects.filter(user = request.user,date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total'] or 0
     
-    incomes_last_month = Income.objects.filter(date__gte=first_day_of_last_month, 
-date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total']
+    incomes_last_month = Income.objects.filter(user = request.user,date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month).aggregate(total=Sum('amount'))['total'] or 0
 
 
     thirty_days_ago = today - timedelta(days=30)
 
-    expenses_last_30_days = Expense.objects.filter(date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total']
+    expenses_last_30_days = Expense.objects.filter(user = request.user,date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total'] or 0
 
-    incomes_last_30_days = Income.objects.filter(date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total']
+    incomes_last_30_days = Income.objects.filter(user = request.user,date__gte=thirty_days_ago,date__lte=today).aggregate(total=Sum('amount'))['total'] or 0
 
-    balance = total_incomes - total_expenses
-    last_month_balance = incomes_last_month - expenses_last_month
-    last_30_days_balance = incomes_last_30_days - expenses_last_30_days
+    balance = (total_incomes or 0) - (total_expenses or 0)
+    last_month_balance = (incomes_last_month or 0) - (expenses_last_month or 0)
+    last_30_days_balance = (incomes_last_30_days or 0) - (expenses_last_30_days or 0)
+
 
     user = User.objects.get(id=request.user.id)
     try:
@@ -192,9 +193,21 @@ def searchExpense(request):
 def expenses_summary(request):
     today_date = datetime.date.today()
     month_ago = today_date - datetime.timedelta(days = 30)
-    expenses=  Expense.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
-    result = {}
 
+    val = request.GET.get('value', 'all')
+    if val=="all":
+        expenses = Expense.objects.filter(user = request.user)
+    elif val=="last_30_days":
+        expenses=  Expense.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
+    else:
+        today = timezone.now().date()
+        first_day_of_current_month = today.replace(day=1)
+        last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+        first_day_of_last_month = last_day_of_last_month.replace(day=1)
+        expenses =Expense.objects.filter(user = request.user,date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month)
+
+    result = {}
     def get_catgeory(expense):
         return expense.category.name
     
@@ -215,7 +228,11 @@ def expenses_summary(request):
     return JsonResponse({'expense_category_data':result}, safe=False)
 
 def stats(request):
-    return render(request,'core/stats.html')
+    today = timezone.now().date()
+    first_day_of_current_month = today.replace(day=1)
+    last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+    last_month_name = last_day_of_last_month.strftime('%B')
+    return render(request,'core/stats.html',{"month":last_month_name})
 
 @login_required(login_url='login')
 def exportCSV(request):
