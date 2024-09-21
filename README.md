@@ -5,7 +5,7 @@ Expense Tracker is a fully responsive web application developed using **Django**
 This project significantly contributed to the enhancement of my knowledge in **Django** and **Tailwind CSS**.
 
 ## Demo
-https://github.com/user-attachments/assets/066b0a1d-3ebb-4f7f-9147-ea766be04c7d
+https://github.com/user-attachments/assets/d11f29cc-0f22-4882-a109-841a73a6a75e
 
 ## Features
 
