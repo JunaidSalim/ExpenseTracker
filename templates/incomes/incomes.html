@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Income Heading -->
-<div class="flex justify-between mx-2 my-4">
+<div class="flex justify-between mx-2 my-4 flex-wrap">
     <div>
         <h1 class="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white">Incomes</h1>
     </div>
@@ -15,8 +15,8 @@
 </div>
 {% if incomes.count %}
 <!-- Button and Search Bar  -->
-<div class="flex justify-between items-center mt-1">
-    <div>
+<div class="flex flex-wrap justify-between items-center mt-1">
+    <div class="ml-3 md:ml-0">
         <a href="{% url 'export-excel' %}?tab=income"
             class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base p-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Export
             Excel<span class="text-slate-200">(.xls)</span> </a>
@@ -27,7 +27,7 @@
             class="focus:outline-none text-white bg-yellow-600 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-base p-2.5 me-2 mb-2 dark:focus:ring-yellow-900">Export
             CSV</a>
     </div>
-    <div class="w-[40%] mr-4">
+    <div class="w-full m-4 lg:m-0 lg:w-[40%] lg:mr-4">
 
         <div class="relative">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
