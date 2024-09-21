@@ -10,6 +10,8 @@ import json
 from django.db.models import Q, F
 from django.http import JsonResponse
 import datetime
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your views here.
 @login_required(login_url='login')
@@ -132,7 +134,20 @@ def searchIncome(request):
 def incomes_summary(request):
     today_date = datetime.date.today()
     month_ago = today_date - datetime.timedelta(days = 30)
-    incomes =  Income.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
+    
+    val = request.GET.get('value', 'all')
+    if val=="all":
+        incomes = Income.objects.filter(user = request.user)
+    elif val=="last_30_days":
+        incomes=  Income.objects.filter(user = request.user,date__gte = month_ago, date__lte = today_date)
+    else:
+        today = timezone.now().date()
+        first_day_of_current_month = today.replace(day=1)
+        last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+        first_day_of_last_month = last_day_of_last_month.replace(day=1)
+        incomes =Income.objects.filter(user = request.user,date__gte=first_day_of_last_month, 
+date__lte=last_day_of_last_month)
+    
     result = {}
 
     def get_catgeory(income):
@@ -155,4 +170,8 @@ def incomes_summary(request):
     return JsonResponse({'income_source_data':result}, safe=False)
 
 def stats(request):
-    return render(request,'incomes/stats.html')
+    today = timezone.now().date()
+    first_day_of_current_month = today.replace(day=1)
+    last_day_of_last_month = first_day_of_current_month - timedelta(days=1)
+    last_month_name = last_day_of_last_month.strftime('%B')
+    return render(request,'incomes/stats.html',{"month":last_month_name})

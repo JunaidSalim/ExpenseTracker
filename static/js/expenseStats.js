@@ -100,7 +100,6 @@ const getChartData = (value) => {
         "last_30_days": "Last 30 Days"
       }
 
-      console.log(data_key[value])
       renderbarChart(data, labels, data_key[value]);
       renderdouChart(data, labels, data_key[value]);
 
